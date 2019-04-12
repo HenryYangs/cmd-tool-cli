@@ -14,6 +14,9 @@ const tool = require('./../lib')
 
 program.version(`v${config.version}`)
   .option('-o, --output [path]', 'Directory of output')
+  .option('--no-git', 'Do not initialize with git')
+  .option('--no-dep', 'Do not install any dependency')
+  .parse(process.argv)
 
 // Initialize project
 program.command('init')
@@ -21,12 +24,15 @@ program.command('init')
   .action(() => {
     const resolvedPath = path.resolve(process.cwd(), program.output || './')
     const filename = `${resolvedPath}/package.json`
-    const hasPkg = fs.existsSync(filename)
-    const pkg = hasPkg ? require(filename) : false
     const shellScript = `
-      ${ hasPkg ? '' : 'npm init -y' }
-      npm i commander -S
-      npm i eslint babel-eslint husky lint-staged standard-version @commitlint/cli @commitlint/config-conventional -D
+      cd ${resolvedPath}
+      ${ program.git ? 'git init' : '' }
+      npm init -y
+      ${ program.dep ? `
+          npm i commander -S
+          npm i eslint babel-eslint husky lint-staged standard-version @commitlint/cli @commitlint/config-conventional -D
+        `  : ''
+      }
     `
 
     shell.exec(
@@ -39,9 +45,14 @@ program.command('init')
 
         tool(resolvedPath)
 
+        if (!program.dep) return
         /**
          * write config to package.json
          */
+        let pkg = require(filename)
+
+        delete pkg.scripts.test
+
         pkg.scripts.release = "standard-version"
         pkg.scripts.lint = "eslint ."
 

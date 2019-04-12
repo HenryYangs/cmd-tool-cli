@@ -6,14 +6,16 @@ It is a scaffold to create a command line tool project.
 
 ```shell
   npm i cmd-tool-cli -g
-  mkdir projectName && cd projectName
-  npm init -y // create a package.json file is optional
+  mkdir projectName
+  cd projectName // this command is optional
   cmd-tool-cli init
 ```
 
 ## Options
 
 - -o, --output: specify the output directory
+- --no-git: Do not initialize with git
+- --no-dep: Do not install npm dependencies
 
 ## Description
 
