@@ -19,27 +19,27 @@ program.version(`v${config.version}`)
 program.command('init')
   .description('Initialize Project')
   .action(() => {
+    const resolvedPath = path.resolve(process.cwd(), program.output || './')
+    const filename = `${resolvedPath}/package.json`
+    const pkg = require(filename)
+    const shellScript = `
+      ${ pkg ? '' : 'npm init -y' }
+      
+    `
+
     shell.exec(
-      `
-        npm i commander -S
-        npm i eslint babel-eslint husky lint-staged standard-version @commitlint/cli @commitlint/config-conventional -D
-      `,
+      shellScript,
       error => {
         if (error) {
           console.error(`exec error: ${error}`)
           return
         }
 
-        const resolvedPath = path.resolve(process.cwd(), program.output || './')
-
         tool(resolvedPath)
 
         /**
          * write config to package.json
          */
-        const filename = `${resolvedPath}/package.json`
-        const pkg = require(filename)
-
         pkg.scripts.release = "standard-version"
         pkg.scripts.lint = "eslint ."
 
