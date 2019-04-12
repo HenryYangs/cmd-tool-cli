@@ -7,6 +7,7 @@ It is a scaffold to create a command line tool project.
 ```shell
   npm i cmd-tool-cli -g
   mkdir projectName && cd projectName
+  npm init -y // create a package.json file is optional
   cmd-tool-cli init
 ```
 

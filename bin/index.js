@@ -21,10 +21,12 @@ program.command('init')
   .action(() => {
     const resolvedPath = path.resolve(process.cwd(), program.output || './')
     const filename = `${resolvedPath}/package.json`
-    const pkg = require(filename)
+    const hasPkg = fs.existsSync(filename)
+    const pkg = hasPkg ? require(filename) : false
     const shellScript = `
-      ${ pkg ? '' : 'npm init -y' }
-      
+      ${ hasPkg ? '' : 'npm init -y' }
+      npm i commander -S
+      npm i eslint babel-eslint husky lint-staged standard-version @commitlint/cli @commitlint/config-conventional -D
     `
 
     shell.exec(
