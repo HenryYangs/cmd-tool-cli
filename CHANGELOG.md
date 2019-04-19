@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/HenryYong/tool-cli/compare/v0.2.2...v0.3.0) (2019-04-19)
+
+
+### Features
+
+* add "bin" in package.json ([e2a6a10](https://github.com/HenryYong/tool-cli/commit/e2a6a10))
+
+
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/HenryYong/tool-cli/compare/v0.2.1...v0.2.2) (2019-04-12)
 
