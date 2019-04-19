@@ -45,31 +45,36 @@ program.command('init')
 
         tool(resolvedPath)
 
-        if (!program.dep) return
         /**
          * write config to package.json
          */
         let pkg = require(filename)
 
-        delete pkg.scripts.test
+        if (program.dep) {
+          delete pkg.scripts.test
 
-        pkg.scripts.release = "standard-version"
-        pkg.scripts.lint = "eslint ."
+          pkg.scripts.release = "standard-version"
+          pkg.scripts.lint = "eslint ."
 
-        pkg.husky = {
-          "hooks": {
-            "pre-commit": "lint-staged",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+          pkg.husky = {
+            "hooks": {
+              "pre-commit": "lint-staged",
+              "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+            }
+          }
+
+          pkg['lint-staged'] = {
+            "linters": {
+              "src/**/*.js": [
+                "npm run lint",
+                "git add ."
+              ]
+            }
           }
         }
 
-        pkg['lint-staged'] = {
-          "linters": {
-            "src/**/*.js": [
-              "npm run lint",
-              "git add ."
-            ]
-          }
+        pkg.bin = {
+          [pkg.name]: "./bin/index.js"
         }
 
         fs.writeFile(filename, JSON.stringify(pkg, null, 2), function (err) {
